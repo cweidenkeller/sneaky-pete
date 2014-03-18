@@ -562,6 +562,42 @@ unit u_nova_guest_agent
     :   src/nova/guest/agent.cc
     ;
 
+unit u_redis_commands
+    :   src/nova/guest/redis/commands.h
+        redis_common
+    ;
+
+unit u_redis_config
+    :   src/nova/guest/redis/config.h
+        redis_common
+    ;
+
+unit u_redis_connection
+    :   src/nova/guest/redis/connection.cc
+        src/nova/guest/redis/connection.h
+        redis_common
+    ;
+
+unit u_redis_control
+    :   src/nova/guest/redis/control.h
+        redis_common
+    ;
+
+unit u_redis_response
+    :   src/nova/guest/redis/response.h
+        redis_common
+    ;
+
+unit u_redis_client
+    :   src/nova/guest/redis/client.h
+        u_redis_commands
+        u_redis_config
+        u_redis_connection
+        u_redis_control
+        u_redis_response
+        redis_common
+    ;
+
 alias empty_agent_lib
     :   pch
         u_nova_flags
@@ -573,6 +609,12 @@ alias empty_agent_lib
         u_nova_utils_regex
         u_nova_rpc_Sender
         u_nova_utils_threads
+    ;
+
+alias redis_common
+    :   src/nova/guest/redis/common.cc
+        src/nova/guest/redis/common.h
+        src/nova/guest/redis/constants.h
     ;
 
 alias mysql_agent_lib
@@ -595,7 +637,6 @@ alias mysql_agent_lib
         u_nova_guest_monitoring_MonitoringMessageHandler
         u_nova_guest_mysql_MySqlMessageHandler
     ;
-
 
 
 ###############################################################################
@@ -772,6 +813,10 @@ exe empty-guest
         pch
     :   <linkflags>$(EXE_LINK_FLAGS)
     ;
+
+exe redis-client
+    :   tests/nova/guest/test_client.cpp
+        u_redis_client
 
 exe sneaky-pete-mysql
 	:	static_dependencies
