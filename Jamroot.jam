@@ -572,6 +572,10 @@ unit u_redis_config
         redis_common
     ;
 
+unit u_nova_guest_RedisMessageHandler
+    :    src/nova/guest/RedisMessageHandler.cc
+    ;
+
 unit u_redis_connection
     :   src/nova/guest/redis/connection.cc
         src/nova/guest/redis/connection.h
@@ -815,8 +819,9 @@ exe empty-guest
     ;
 
 exe redis-client
-    :   tests/nova/guest/test_client.cpp
+    :   tests/nova/guest/redis/test_client.cpp
         u_redis_client
+    ;
 
 exe sneaky-pete-mysql
 	:	static_dependencies
@@ -827,6 +832,17 @@ exe sneaky-pete-mysql
         pch
     :   <linkflags>$(EXE_LINK_FLAGS)
 	;
+
+exe sneaky-pete-redis
+    :   static_dependencies
+        empty_agent_lib
+        u_nova_guest_RedisMessageHandler
+        src/redis_agent.cc
+        lib_m
+        lib_c
+        pch
+    :   <linkflags>$(EXE_LINK_FLAGS)
+    ;
 
 # Run this in Valgrind to find possible leaks.
 exe leak_tester

@@ -261,7 +261,9 @@ class Client
         }
         void _find_config_command()
         {
-            for (int i=0; i < config->get_renamed_commands().size(); i++)
+            for (unsigned int i=0;
+                 i < config->get_renamed_commands().size();
+                 i++)
             {
                 if (config->get_renamed_commands()[i][RENAMED_COMMAND] ==
                     COMMAND_CONFIG)

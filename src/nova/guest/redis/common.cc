@@ -1,3 +1,5 @@
+#include <string>
+#include <sstream>
 #ifndef COMMON_CC
 #define COMMON_CC
 namespace nova { namespace redis {
@@ -14,4 +16,4 @@ int to_int(std::string number)
     return num;
 }
 }}//end nova::redis namespace.
-#endif /* COMMON_H */
+#endif /* COMMON_CC */

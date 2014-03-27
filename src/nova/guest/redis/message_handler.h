@@ -1,6 +1,6 @@
 #include <string>
-#include "client.h"
-#include "constants.h"
+#include "nova/guest/redis/client.h"
+#include "nova/guest/redis/constants.h"
 namespace nova { namespace redis {
 class RedisMessageHandler
 {
