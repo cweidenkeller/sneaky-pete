@@ -573,7 +573,17 @@ unit u_redis_config
     ;
 
 unit u_nova_guest_RedisMessageHandler
-    :    src/nova/guest/RedisMessageHandler.cc
+    :   src/nova/guest/RedisMessageHandler.cc
+        src/nova/guest/redis/client.h
+    :   u_nova_guest_apt_apt
+        u_nova_guest_apt_AptException
+        u_nova_json
+        u_nova_db_mysql
+        u_nova_guest_mysql_MySqlAdmin
+        u_nova_guest_mysql_MySqlAppStatus
+        u_nova_guest_mysql_MySqlApp
+        u_nova_guest_monitoring_Monitoring
+        u_nova_volume
     ;
 
 unit u_redis_connection

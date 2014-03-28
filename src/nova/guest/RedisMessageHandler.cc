@@ -14,7 +14,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/variant.hpp>
 #include "nova/VolumeManager.h"
-
+#include "nova/guest/redis/client.h"
 
 using namespace boost::assign;
 
@@ -48,21 +48,59 @@ vector<string> get_packages_argument(JsonObjectPtr obj) {
     }
 }
 }
-RedisMessageHandler::RedisMessageHandler() {
+RedisMessageHandler::RedisMessageHandler(
+    nova::guest::apt::AptGuestPtr apt,
+    nova::guest::monitoring::MonitoringManagerPtr monitoring,
+    VolumeManagerPtr volumeManager)
+:   apt(apt),
+    monitoring(monitoring),
+    volumeManager(volumeManager) {
 
 }
 JsonDataPtr RedisMessageHandler::handle_message(const GuestInput & input) {
     if (input.method_name == "prepare") {
-        NOVA_LOG_INFO("Calling prepare...");
         const auto packages = get_packages_argument(input.args);
-        //const auto config_contents = input.args->get_string("config_contents");
+        const auto config_contents = input.args->get_string("config_contents");
         const auto overrides = input.args->get_optional_string("overrides");
-        NOVA_LOG_INFO("Skipping Monitoring Agent as no endpoints were supplied.");
-        return JsonData::from_null();
+        // Mount volume
+        if (volumeManager) {
+            const auto device_path = input.args->get_optional_string("device_path");
+            const auto mount_point = volumeManager->get_mount_point();
+            if (device_path && device_path.get().length() > 0) {
+                NOVA_LOG_INFO("Mounting volume for prepare call...");
+                bool write_to_fstab = true;
+                VolumeManagerPtr volume_manager = this->create_volume_manager();
+                VolumeDevice vol_device = volume_manager->create_volume_device(device_path.get());
+                vol_device.format();                                                                                                                                          vol_device.mount(mount_point, write_to_fstab);
+                NOVA_LOG_INFO("Mounted the volume.");
+            }
+        }
+        // Restore the database?
+        optional<BackupRestoreInfo> restore;
+        const auto backup_url = input.args->get_optional_string("backup_url");
+        if (backup_url && backup_url.get().length() > 0) {
+            NOVA_LOG_INFO("Calling Restore...")
+            if (!input.token) {
+                NOVA_LOG_ERROR("No token given! Cannot do this restore!");
+                throw GuestException(GuestException::MALFORMED_INPUT);
+            }
+            const auto token = input.token;
+            const auto backup_checksum = input.args->get_optional_string("backup_checksum");
+            restore = optional<BackupRestoreInfo>(BackupRestoreInfo(token.get(), backup_url.get(), backup_checksum.get()));
+        }
+        // installation of monitoring
+        const auto monitoring_info = input.args->get_optional_object("monitoring_info");
+        if (monitoring_info) {
+            NOVA_LOG_INFO("Installing Monitoring Agent following successful prepare");
+            const auto token = monitoring_info->get_string("token");
+            const auto endpoints = monitoring_info->get_string("endpoints");
+            monitoring->install_and_configure_monitoring_agent(
+                *this->apt, token, endpoints);
+        } else {
+            NOVA_LOG_INFO("Skipping Monitoring Agent as no endpoints were supplied.");
         }
         return JsonData::from_null();
-
     }
 
-
+}
 }}//end namespace nova::guest
