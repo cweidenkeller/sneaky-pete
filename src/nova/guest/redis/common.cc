@@ -1,5 +1,6 @@
 #include <string>
 #include <sstream>
+#include "common.h"
 #ifndef COMMON_CC
 #define COMMON_CC
 namespace nova { namespace redis {

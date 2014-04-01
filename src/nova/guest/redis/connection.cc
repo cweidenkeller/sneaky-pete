@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string>
+#include "connection.h"
 #ifndef CONNECTION_CC
 #define CONNECTION_CC
 namespace nova { namespace redis {
