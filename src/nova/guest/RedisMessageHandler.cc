@@ -57,10 +57,12 @@ RedisMessageHandler::RedisMessageHandler(
     volumeManager(volumeManager) {
 
 }
+RedisMessageHandler::~RedisMessageHandler() {
+}
 JsonDataPtr RedisMessageHandler::handle_message(const GuestInput & input) {
     if (input.method_name == "prepare") {
         const auto packages = get_packages_argument(input.args);
-        const auto config_contents = input.args->get_string("config_contents");
+        //const auto config_contents = input.args->get_string("config_contents");
         const auto overrides = input.args->get_optional_string("overrides");
         // Mount volume
         if (volumeManager) {
@@ -71,11 +73,13 @@ JsonDataPtr RedisMessageHandler::handle_message(const GuestInput & input) {
                 bool write_to_fstab = true;
                 VolumeManagerPtr volume_manager = this->create_volume_manager();
                 VolumeDevice vol_device = volume_manager->create_volume_device(device_path.get());
-                vol_device.format();                                                                                                                                          vol_device.mount(mount_point, write_to_fstab);
+                vol_device.format();                                                                                                                                          
+                vol_device.mount(mount_point, write_to_fstab);
                 NOVA_LOG_INFO("Mounted the volume.");
             }
         }
         // Restore the database?
+        /*
         optional<BackupRestoreInfo> restore;
         const auto backup_url = input.args->get_optional_string("backup_url");
         if (backup_url && backup_url.get().length() > 0) {
@@ -100,7 +104,11 @@ JsonDataPtr RedisMessageHandler::handle_message(const GuestInput & input) {
             NOVA_LOG_INFO("Skipping Monitoring Agent as no endpoints were supplied.");
         }
         return JsonData::from_null();
-    }
-
+    }*/
+    return JsonData::from_null();
+}
+VolumeManagerPtr RedisMessageHandler::create_volume_manager()
+{
+        return volumeManager;
 }
 }}//end namespace nova::guest
