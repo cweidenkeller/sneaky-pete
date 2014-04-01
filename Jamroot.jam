@@ -91,7 +91,7 @@ lib lib_uuid : : <name>uuid ;
 
 alias dependencies
 	:   lib_json lib_rabbitmq  lib_uuid lib_confuse lib_boost_thread
- 	;
+    ;
 
 lib lib_pthread : : <name>pthread ; # Seems to only be needed in static builds
                                     # static builds also require lib_c.
@@ -563,18 +563,18 @@ unit u_nova_guest_agent
     ;
 
 unit u_redis_commands
-    :   src/nova/guest/redis/commands.h
+    :   src/nova/guest/redis/commands.cc
         redis_common
     ;
 
 unit u_redis_config
-    :   src/nova/guest/redis/config.h
+    :   src/nova/guest/redis/config.cc
         redis_common
     ;
 
 unit u_nova_guest_RedisMessageHandler
     :   src/nova/guest/RedisMessageHandler.cc
-        src/nova/guest/redis/client.h
+        src/nova/guest/redis/client.cc
     :   u_nova_guest_apt_apt
         u_nova_guest_apt_AptException
         u_nova_json
@@ -587,23 +587,22 @@ unit u_nova_guest_RedisMessageHandler
     ;
 
 unit u_redis_connection
-    :   src/nova/guest/redis/connection.cc
-        src/nova/guest/redis/connection.h
+        src/nova/guest/redis/connection.cc
         redis_common
     ;
 
 unit u_redis_control
-    :   src/nova/guest/redis/control.h
+    :   src/nova/guest/redis/control.cc
         redis_common
     ;
 
 unit u_redis_response
-    :   src/nova/guest/redis/response.h
+    :   src/nova/guest/redis/response.cc
         redis_common
     ;
 
 unit u_redis_client
-    :   src/nova/guest/redis/client.h
+    :   src/nova/guest/redis/client.cc
         u_redis_commands
         u_redis_config
         u_redis_connection
@@ -627,7 +626,6 @@ alias empty_agent_lib
 
 alias redis_common
     :   src/nova/guest/redis/common.cc
-        src/nova/guest/redis/common.h
         src/nova/guest/redis/constants.h
     ;
 
@@ -861,7 +859,7 @@ exe leak_tester
 		mysql_agent_lib
 		src/leak_tester.cc
 	:   #<link>shared:<dependency>sql_guest_tests
-	    #<link>shared:<dependency>memory_tests
+        #<link>shared:<dependency>memory_tests
 	;
 
 # Run this to find out how much memory is availble in the container
