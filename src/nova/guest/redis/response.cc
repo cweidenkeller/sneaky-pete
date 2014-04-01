@@ -6,6 +6,7 @@
 namespace nova { namespace redis {
 response::response(std::string _status,
                    std::string _data) : status(_status),
+                                        description(),
                                         data(_data)
 {
     if (_status == STRING_RESPONSE)

@@ -25,7 +25,8 @@ void Commands::set_commands()
     }
 }
 Commands::Commands(std::string _password, std::string config_command) :
-                   password(_password), _config_command(config_command)
+                   _config_set(), _config_get(), _config_rewrite(),
+                   _config_command(config_command), password(_password)
 {
     set_commands();
 }

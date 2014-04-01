@@ -1,3 +1,5 @@
+#ifndef RESPONSE_H
+#define RESPONSE_H
 #include <string>
 namespace nova { namespace redis {
 struct response
@@ -14,3 +16,4 @@ struct response
     response(std::string _status, std::string _data);
 };
 }}//end nova::redis namespace.
+#endif /* RESPONSE_H */

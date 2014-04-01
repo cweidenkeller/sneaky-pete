@@ -562,19 +562,36 @@ unit u_nova_guest_agent
     :   src/nova/guest/agent.cc
     ;
 
+unit u_redis_client
+    :   src/nova/guest/redis/client.cc
+    ;
+
+unit u_redis_common
+    :   src/nova/guest/redis/common.cc
+    ;
+
 unit u_redis_commands
     :   src/nova/guest/redis/commands.cc
-        redis_common
     ;
 
 unit u_redis_config
     :   src/nova/guest/redis/config.cc
-        redis_common
+    ;
+
+unit u_redis_connection
+    :   src/nova/guest/redis/connection.cc
+    ;
+
+unit u_redis_control
+    :   src/nova/guest/redis/control.cc
+    ;
+
+unit u_redis_response
+    :   src/nova/guest/redis/response.cc
     ;
 
 unit u_nova_guest_RedisMessageHandler
     :   src/nova/guest/RedisMessageHandler.cc
-        src/nova/guest/redis/client.cc
     :   u_nova_guest_apt_apt
         u_nova_guest_apt_AptException
         u_nova_json
@@ -584,31 +601,13 @@ unit u_nova_guest_RedisMessageHandler
         u_nova_guest_mysql_MySqlApp
         u_nova_guest_monitoring_Monitoring
         u_nova_volume
-    ;
-
-unit u_redis_connection
-        src/nova/guest/redis/connection.cc
-        redis_common
-    ;
-
-unit u_redis_control
-    :   src/nova/guest/redis/control.cc
-        redis_common
-    ;
-
-unit u_redis_response
-    :   src/nova/guest/redis/response.cc
-        redis_common
-    ;
-
-unit u_redis_client
-    :   src/nova/guest/redis/client.cc
+        u_redis_client
+        u_redis_common
         u_redis_commands
         u_redis_config
         u_redis_connection
         u_redis_control
         u_redis_response
-        redis_common
     ;
 
 alias empty_agent_lib
@@ -622,11 +621,6 @@ alias empty_agent_lib
         u_nova_utils_regex
         u_nova_rpc_Sender
         u_nova_utils_threads
-    ;
-
-alias redis_common
-    :   src/nova/guest/redis/common.cc
-        src/nova/guest/redis/constants.h
     ;
 
 alias mysql_agent_lib

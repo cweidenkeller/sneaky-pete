@@ -254,14 +254,13 @@ void Client::_find_config_command()
 }
 Client::Client(std::string host, std::string port,
         std::string client_name, std::string config_file) :
-        _host(host), _port(port), _client_name(client_name),
-        _config_file(config_file)
+        _port(port), _host(host), _client_name(client_name),
+        _config_file(config_file), _config_command(COMMAND_CONFIG)
 {
-    _config_command = COMMAND_CONFIG;
     config = new Config(config_file);
     _find_config_command();
     _commands = new Commands(config->get_require_pass(),
-                                _config_command);
+                             _config_command);
     control = new Control(config->get_pidfile());
     _authed = false;
     _name_set = false;
