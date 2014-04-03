@@ -79,7 +79,6 @@ JsonDataPtr RedisMessageHandler::handle_message(const GuestInput & input) {
             }
         }
         // Restore the database?
-        /*
         optional<BackupRestoreInfo> restore;
         const auto backup_url = input.args->get_optional_string("backup_url");
         if (backup_url && backup_url.get().length() > 0) {
@@ -104,7 +103,7 @@ JsonDataPtr RedisMessageHandler::handle_message(const GuestInput & input) {
             NOVA_LOG_INFO("Skipping Monitoring Agent as no endpoints were supplied.");
         }
         return JsonData::from_null();
-    }*/
+    }
     return JsonData::from_null();
 }
 VolumeManagerPtr RedisMessageHandler::create_volume_manager()
