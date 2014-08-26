@@ -47,6 +47,10 @@ class Config
 
         std::string get_append_filename();
 
+        std::string get_unix_socket();
+
+        std::string get_unix_socket_perms();
+
 };
 
 

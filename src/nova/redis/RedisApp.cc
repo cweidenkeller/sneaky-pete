@@ -130,14 +130,18 @@ void RedisApp::prepare(const optional<string> & json_root_password,
                         "daemonize yes\n"
                         "port %5%\n"
                         "logfile %6%\n"
-                        "appendfilename %7%")
+                        "appendfilename %7%\n"
+                        "unixsocket %8\n"
+                        "unixsocketperm %9")
                         % config.get_max_memory()
                         % config.get_db_dir()
                         % config.get_pidfile()
                         % config.get_db_filename()
                         % config.get_port()
                         % config.get_log_file()
-                        % config.get_append_filename());
+                        % config.get_append_filename()
+                        % config.get_unix_socket()
+                        % config.get_unix_socket_perms());
 
             fd << local_conf;
             fd.close();

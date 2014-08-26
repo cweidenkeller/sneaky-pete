@@ -120,4 +120,11 @@ std::string Config::get_log_file() {
     return _get_string_value(LOG_FILE);
 }
 
+std::string Config::get_unix_socket() {
+    return _get_string_value(UNIX_SOCKET);
+}
+
+std::string Config::get_unix_socket_perms() {
+    return _get_string_value(UNIX_SOCKET_PERMISSION);
+}
 }}//end nova::redis
